@@ -1,10 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:social_media/core/constants/constands.dart';
-import 'package:social_media/helper/helper_function.dart';
+import 'package:social_media/helper/image_picker.dart';
 import 'package:social_media/precentation/main_page/main_page_screen.dart';
 import 'package:social_media/service/auth_service.dart';
-import 'package:social_media/widgets/sncack_bar.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -14,23 +15,24 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  // TextEditingController nameControler = TextEditingController();
-  // TextEditingController emailControler = TextEditingController();
-  // TextEditingController phoneNumberControler = TextEditingController();
-  // TextEditingController passwordControler = TextEditingController();
-  String email = "";
-  String password = "";
-  String userName = "";
+  TextEditingController nameControler = TextEditingController();
+  TextEditingController emailControler = TextEditingController();
+  TextEditingController bioControler = TextEditingController();
+  TextEditingController passwordControler = TextEditingController();
+  // String email = "";
+  // String password = "";
+  // String userName = "";
   final formKey = GlobalKey<FormState>();
-  bool isLoading = false;
-  AuthService authservice = AuthService();
+  bool _isLoading = false;
+  Uint8List? _image;
+  // AuthService authservice = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Log in Page'),
       ),
-      body: isLoading
+      body: _isLoading
           ? Center(
               child: CircularProgressIndicator(
               color: Theme.of(context).primaryColor,
@@ -41,6 +43,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Stack(
+                      children: [
+                        _image != null
+                            ? CircleAvatar(
+                                radius: 64,
+                                backgroundImage: MemoryImage(_image!),
+                                backgroundColor: Colors.red,
+                              )
+                            : const CircleAvatar(
+                                radius: 64,
+                                backgroundImage: NetworkImage(
+                                    'https://i.stack.imgur.com/l60Hf.png'),
+                                backgroundColor: Colors.red,
+                              ),
+                        Positioned(
+                          bottom: -10,
+                          left: 80,
+                          child: IconButton(
+                            onPressed: selectImage,
+                            icon: const Icon(Icons.add_a_photo),
+                          ),
+                        )
+                      ],
+                    ),
                     Container(
                       width: double.infinity,
                       height: 300,
@@ -52,14 +78,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     kheight10,
                     FromFeildWidgets(
+                      controller: nameControler,
                       hintText: 'User Name',
                       type: TextInputType.name,
                       icon: Icons.person,
-                      formFUnction: (val) {
-                        setState(() {
-                          userName = val;
-                        });
-                      },
+                      formFUnction: (val) {},
                       validator: (val) {
                         if (val!.isNotEmpty) {
                           return null;
@@ -70,14 +93,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     kheight10,
                     FromFeildWidgets(
+                      controller: emailControler,
                       hintText: 'Email',
                       type: TextInputType.emailAddress,
                       icon: Icons.email_outlined,
-                      formFUnction: (val) {
-                        setState(() {
-                          email = val;
-                        });
-                      },
+                      formFUnction: (val) {},
                       validator: (val) {
                         return RegExp(
                                     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
@@ -88,8 +108,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     kheight10,
                     FromFeildWidgets(
-                      hintText: 'Phone Number',
-                      type: TextInputType.number,
+                      controller: bioControler,
+                      hintText: 'Bio',
+                      type: TextInputType.text,
                       icon: Icons.phone,
                       formFUnction: (val) {},
                       validator: (val) {
@@ -102,15 +123,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     kheight10,
                     FromFeildWidgets(
+                      controller: passwordControler,
                       hintText: 'Password',
                       type: TextInputType.name,
                       icon: Icons.album_outlined,
                       suffixIcon: Icons.visibility,
-                      formFUnction: (val) {
-                        setState(() {
-                          password = val;
-                        });
-                      },
+                      formFUnction: (val) {},
                       validator: (val) {
                         if (val!.length < 6) {
                           return "password to short";
@@ -121,10 +139,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hide: true,
                     ),
                     ElevatedButton(
-                        onPressed: () {
-                          registor();
-                        },
-                        child: const Text('Sign Up')),
+                        onPressed: signUpUser, child: const Text('Sign Up')),
                     kheight20,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -153,26 +168,64 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  registor() async {
-    if (formKey.currentState!.validate()) {
+  // registor() async {
+  //   if (formKey.currentState!.validate()) {
+  //     setState(() {
+  //       isLoading = true;
+  //     });
+  //     await authservice
+  //         .regsterUserWithEMailAndPassword(userName, email, password)
+  //         .then((value) async {
+  //       if (value == true) {
+  //         // await HelperFunction.saveUserLogedInStus(true);
+  //         // await HelperFunction.saveUserNameSf(userName);
+  //         // await HelperFunction.saveUserEmailSf(email);
+  //         Get.to(MainPage());
+  //       } else {
+  //         showSnackbar(context, kredcolor, value);
+  //         setState(() {
+  //           isLoading = false;
+  //         });
+  //       }
+  //     });
+  //   }
+  // }
+  selectImage() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    // set state because we need to display the image we selected on the circle avatar
+    setState(() {
+      _image = im;
+    });
+  }
+
+  void signUpUser() async {
+    // set loading to true
+    setState(() {
+      _isLoading = true;
+    });
+
+    // signup user using our authmethodds
+    String res = await AuthMethods().signUpUser(
+        email: emailControler.text,
+        password: passwordControler.text,
+        username: nameControler.text,
+        bio: bioControler.text,
+        file: _image!);
+    // if string returned is sucess, user has been created
+    if (res == "success") {
       setState(() {
-        isLoading = true;
+        _isLoading = false;
       });
-      await authservice
-          .regsterUserWithEMailAndPassword(userName, email, password)
-          .then((value) async {
-        if (value == true) {
-          // await HelperFunction.saveUserLogedInStus(true);
-          // await HelperFunction.saveUserNameSf(userName);
-          // await HelperFunction.saveUserEmailSf(email);
-          Get.to(MainPage());
-        } else {
-          showSnackbar(context, kredcolor, value);
-          setState(() {
-            isLoading = false;
-          });
-        }
+      // navigate to the home screen
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => MainPage()),
+      );
+    } else {
+      setState(() {
+        _isLoading = false;
       });
+      // show the error
+      showSnackBar(context, res);
     }
   }
 }
@@ -214,7 +267,7 @@ class FromFeildWidgets extends StatelessWidget {
             ),
             prefixIcon: Icon(icon),
             suffixIcon: Icon(suffixIcon)),
-        //controller: controller,
+        controller: controller,
         keyboardType: type,
         onChanged: formFUnction,
         validator: validator,

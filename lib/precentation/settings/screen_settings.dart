@@ -12,7 +12,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthService authService = AuthService();
+    // AuthService authService = AuthService();
     return Scaffold(
         appBar: AppBar(
           title: const Text('Settigs'),
@@ -42,7 +42,7 @@ class SettingsScreen extends StatelessWidget {
               title: Text('Log Out _$userName'),
               leading: const Icon(Icons.lock_outline),
               onLongPress: () async {
-                await authService.sighnOut();
+                //  await authService.sighnOut();
                 // Get.offAll(const LoginScreen());
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: ((context) => LoginScreen())),

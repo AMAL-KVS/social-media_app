@@ -1,181 +1,168 @@
-import 'dart:developer';
-import 'dart:io';
+// ignore_for_file: use_build_context_synchronously
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:social_media/Application/provider.dart';
 import 'package:social_media/core/constants/constands.dart';
-import 'package:social_media/precentation/Login/ponenumber/phone_number_screen.dart';
-import 'package:social_media/precentation/profile/screen_profile.dart';
-import 'package:social_media/precentation/profile/widgets/show_diloge_posts.dart';
-import 'package:uuid/uuid.dart';
-import 'package:image/image.dart' as Im;
-
-List gallery = [];
+import 'package:image_picker/image_picker.dart';
+import 'package:social_media/helper/image_picker.dart';
+import 'package:social_media/service/firestore_methods.dart';
 
 class NewPostsScreen extends StatefulWidget {
-  NewPostsScreen({Key? key}) : super(key: key);
+  const NewPostsScreen({Key? key}) : super(key: key);
 
   @override
   State<NewPostsScreen> createState() => _NewPostsScreenState();
 }
 
 class _NewPostsScreenState extends State<NewPostsScreen> {
-  File? file;
+  Uint8List? _file;
+  bool isLoading = false;
+  final TextEditingController _descriptionController = TextEditingController();
+  void addPost(String uid, String username, String profImage) async {
+    setState(() {
+      isLoading = true;
+    });
+    // start the loading
+    try {
+      // upload to storage and db
+      String res = await FireStoreMethods().uploadPost(
+        _descriptionController.text,
+        _file!,
+        uid,
+        username,
+        profImage,
+      );
+      if (res == "success") {
+        setState(() {
+          isLoading = false;
+        });
+        showSnackBar(
+          context,
+          'Posted!',
+        );
+        clearImage();
+      } else {
+        showSnackBar(context, res);
+      }
+    } catch (err) {
+      setState(() {
+        isLoading = false;
+      });
+      showSnackBar(
+        context,
+        err.toString(),
+      );
+    }
+  }
 
-  String postId = const Uuid().v4();
+  void clearImage() {
+    setState(() {
+      _file = null;
+    });
+  }
 
-  bool isloadin = false;
+  @override
+  void dispose() {
+    super.dispose();
+    _descriptionController.dispose();
+  }
 
-  TextEditingController postMessegeController = TextEditingController();
+  @override
+  void initState() {
+    addData();
+    super.initState();
+  }
 
-  final storageRef = FirebaseStorage.instance.ref();
-
-  final postRef = FirebaseFirestore.instance.collection('user');
+  addData() async {
+    UserProvider userProvider = Provider.of(context, listen: false);
+    await userProvider.refreshUser();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: kwhitecolor,
           elevation: 0,
           toolbarHeight: 80,
-          leading: IconButton(
-              icon: const Icon(
-                Icons.arrow_back,
-                color: kblackcolor,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              }),
           centerTitle: true,
           title:
               const Text('Create a Post', style: TextStyle(color: kblackcolor)),
           actions: [
             IconButton(
-                onPressed: () async {
-                  await compresImage();
-                  String mediaUrl = await uploadImage(file);
-                  createPostInFireBase(
-                      mediaUrl: mediaUrl,
-                      postMessege: postMessegeController.text);
-                  file = null;
-                  postMessegeController.clear();
-                  postId = const Uuid().v4();
-                  Get.back();
+                onPressed: () {
+                  addPost(
+                      userProvider.getUser.uid,
+                      userProvider.getUser.username,
+                      userProvider.getUser.photoUrl);
                 },
                 icon: const Icon(Icons.post_add, color: kblackcolor))
           ],
         ),
-        body: ListView(
-          children: [
-            Row(
-              children: const [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundColor: kblackcolor,
-                  backgroundImage: NetworkImage(knullimage),
-                ),
-                kwidth10,
-                Text(
-                  'User Name',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
-            file == null
-                ? const SizedBox()
-                : isloadin == true
-                    ? const Center(
-                        child: CircularProgressIndicator(color: kblackcolor),
-                      )
-                    : Container(
-                        height: 400,
-                        width: 100,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                fit: BoxFit.cover, image: FileImage(file!))),
+        body: isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : ListView(
+                children: [
+                  Row(
+                    children: const [
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundColor: kblackcolor,
+                        backgroundImage: NetworkImage(knullimage),
                       ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 150),
-              child: TextField(
-                controller: postMessegeController,
-                decoration: const InputDecoration(hintText: 'New post....'),
-              ),
-            ),
-            ListTile(
-                leading: const Icon(Icons.photo),
-                title: const Text('Add A Phooto'),
-                onTap: () async {
-                  await pickImageForPost();
-                  if (file == null) {
-                    setState(() {
-                      isloadin = true;
-                    });
-                  } else {
-                    setState(() {
-                      isloadin = false;
-                    });
-                  }
-                  log(file.toString());
-                }),
-            const ListTile(
-                leading: Icon(Icons.video_call), title: Text('Add A Video')),
-            const ListTile(
-                leading: Icon(Icons.broadcast_on_home_sharp),
-                title: Text('Quick Live')),
-            const ListTile(
-                leading: Icon(Icons.text_fields_outlined),
-                title: Text('Add A Text')),
-          ],
-        ));
+                      kwidth10,
+                      Text(
+                        'User Name',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                  _file == null
+                      ? const Center(
+                          child: Text('Post some'),
+                        )
+                      : imageContainer(_file, context),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 150),
+                      child: TextField(
+                          controller: _descriptionController,
+                          decoration:
+                              const InputDecoration(hintText: 'New post....'))),
+                  ListTile(
+                      leading: const Icon(Icons.photo),
+                      title: const Text('Add A Phooto'),
+                      onTap: () async {
+                        Uint8List file = await pickImage(ImageSource.gallery);
+                        setState(() {
+                          _file = file;
+                        });
+                      }),
+                  const ListTile(
+                      leading: Icon(Icons.video_call),
+                      title: Text('Add A Video')),
+                  const ListTile(
+                      leading: Icon(Icons.broadcast_on_home_sharp),
+                      title: Text('Quick Live')),
+                  const ListTile(
+                      leading: Icon(Icons.text_fields_outlined),
+                      title: Text('Add A Text')),
+                ],
+              ));
   }
 
-//pick image from gallery
-  pickImageForPost() async {
-    XFile? file = await ImagePicker().pickImage(source: ImageSource.gallery);
-    File fileType = File(file!.path);
-    this.file = fileType;
-  }
-
-//compress image
-  compresImage() async {
-    final tempDir = await getTemporaryDirectory();
-    final path = tempDir.path;
-    Im.Image imageFile = Im.decodeImage(file!.readAsBytesSync())!;
-    final compresedImageFile = File('$path/img_$postId.jpg')
-      ..writeAsBytesSync(Im.encodeJpg(imageFile, quality: 85));
-    file = compresedImageFile;
-  }
-
-//upload image
-  Future<String> uploadImage(imageFile) async {
-    final uploadTask = storageRef.child("post_$postId.jpg").putFile(imageFile);
-    final storageSnap = await uploadTask.whenComplete(() => null);
-    String downloadUrl = await storageSnap.ref.getDownloadURL();
-    return downloadUrl;
-  }
-
-  //create post by user
-  createPostInFireBase({required String mediaUrl, required postMessege}) {
-    postRef
-        .doc(currentemail)
-        .collection(currentemail.toString())
-        .doc(postId)
-        .set({
-      "postId": postId,
-      "ownerid": ScreenPhoneNumber.phoneNumber,
-      "mediaUrl": mediaUrl,
-      "postMessege": postMessege
-    });
-    FirebaseFirestore.instance.collection('home').doc().set({
-      "postId": postId,
-      "ownerid": ScreenPhoneNumber.phoneNumber,
-      "mediaUrl": mediaUrl,
-      "postMessege": postMessege
-    });
+  Container imageContainer(imageLink, context) {
+    return Container(
+      height: 400,
+      width: 100,
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              fit: BoxFit.fill, image: MemoryImage(imageLink!))),
+    );
   }
 }
