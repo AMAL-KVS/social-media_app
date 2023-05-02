@@ -143,26 +143,25 @@ class _NewPostsScreenState extends State<NewPostsScreen> {
                           _file = file;
                         });
                       }),
-                  const ListTile(
-                      leading: Icon(Icons.video_call),
-                      title: Text('Add A Video')),
-                  const ListTile(
-                      leading: Icon(Icons.broadcast_on_home_sharp),
-                      title: Text('Quick Live')),
-                  const ListTile(
-                      leading: Icon(Icons.text_fields_outlined),
-                      title: Text('Add A Text')),
+                  // const ListTile(
+                  //     leading: Icon(Icons.video_call),
+                  //     title: Text('Add A Video')),
+                  // const ListTile(
+                  //     leading: Icon(Icons.broadcast_on_home_sharp),
+                  //     title: Text('Quick Live')),
+                  // const ListTile(
+                  //     leading: Icon(Icons.text_fields_outlined),
+                  //     title: Text('Add A Text')),
                 ],
               ));
   }
 
   Container imageContainer(imageLink, context) {
     return Container(
-      height: 400,
-      width: 100,
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              fit: BoxFit.fill, image: MemoryImage(imageLink!))),
-    );
+        // height: 400,
+        // width: 100,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                fit: BoxFit.fill, image: MemoryImage(imageLink!))));
   }
 }

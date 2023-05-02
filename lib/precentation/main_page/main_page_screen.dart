@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media/precentation/home/home.dart';
 import 'package:social_media/precentation/main_page/bottom_nav.dart';
@@ -10,9 +11,9 @@ class MainPage extends StatelessWidget {
   MainPage({Key? key}) : super(key: key);
   final _pages = [
     const HomeScreen(),
-    const MessegeScreen(),
-    NewPostsScreen(),
-    const ProfileBaseScreen(),
+    MessagesScreen(),
+    const NewPostsScreen(),
+    ProfileBaseScreen(uid: FirebaseAuth.instance.currentUser!.uid),
     const NotificationsScreen()
   ];
 

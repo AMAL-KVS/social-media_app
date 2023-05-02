@@ -1,8 +1,8 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
 import 'package:social_media/service/database_service.dart';
 import 'package:social_media/Application/user_model.dart' as model;
 
@@ -45,14 +45,15 @@ class AuthMethods {
             .uploadImageToStorage('profilePics', file, false);
 
         model.UserModel _user = model.UserModel(
-          username: username,
-          uid: cred.user!.uid,
-          photoUrl: photoUrl,
-          email: email,
-          bio: bio,
-          followers: [],
-          following: [],
-        );
+            username: username,
+            uid: cred.user!.uid,
+            photoUrl: photoUrl,
+            email: email,
+            bio: bio,
+            followers: [],
+            following: [],
+            lastMessageTime: DateTime.now(),
+            status: 'offline');
 
         // adding user in our database
         await _firestore
@@ -95,5 +96,6 @@ class AuthMethods {
 
   Future<void> signOut() async {
     await _auth.signOut();
+    log("Out");
   }
 }

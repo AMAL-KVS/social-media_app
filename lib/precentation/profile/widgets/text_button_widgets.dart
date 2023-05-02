@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_media/core/constants/constands.dart';
 
 // ignore: must_be_immutable
 class TextFollowersWidgets extends StatelessWidget {
@@ -21,12 +22,12 @@ class TextFollowersWidgets extends StatelessWidget {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(followers,
               style: const TextStyle(
-                  color: Colors.black,
+                  color: kblackcolor,
                   fontSize: 15,
                   fontWeight: FontWeight.bold)),
           Text(name,
               style: const TextStyle(
-                  color: Colors.black,
+                  color: kblackcolor,
                   fontSize: 15,
                   fontWeight: FontWeight.bold))
         ]));

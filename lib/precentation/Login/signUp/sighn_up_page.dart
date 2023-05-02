@@ -19,9 +19,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController emailControler = TextEditingController();
   TextEditingController bioControler = TextEditingController();
   TextEditingController passwordControler = TextEditingController();
-  // String email = "";
-  // String password = "";
-  // String userName = "";
   final formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   Uint8List? _image;
@@ -67,15 +64,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         )
                       ],
                     ),
-                    Container(
-                      width: double.infinity,
-                      height: 300,
-                      decoration: const BoxDecoration(
-                          color: kwhitecolor,
-                          image: DecorationImage(
-                              image: AssetImage(
-                                  'lib/precentation/assets/107385-login.gif'))),
-                    ),
+                    // Container(
+                    //   width: double.infinity,
+                    //   height: 300,
+                    //   decoration: const BoxDecoration(
+                    //       color: kwhitecolor,
+                    //       image: DecorationImage(
+                    //           image: AssetImage(
+                    //               'lib/precentation/assets/107385-login.gif'))),
+                    // ),
                     kheight10,
                     FromFeildWidgets(
                       controller: nameControler,
@@ -138,6 +135,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       },
                       hide: true,
                     ),
+                    kheight20,
                     ElevatedButton(
                         onPressed: signUpUser, child: const Text('Sign Up')),
                     kheight20,
@@ -168,28 +166,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  // registor() async {
-  //   if (formKey.currentState!.validate()) {
-  //     setState(() {
-  //       isLoading = true;
-  //     });
-  //     await authservice
-  //         .regsterUserWithEMailAndPassword(userName, email, password)
-  //         .then((value) async {
-  //       if (value == true) {
-  //         // await HelperFunction.saveUserLogedInStus(true);
-  //         // await HelperFunction.saveUserNameSf(userName);
-  //         // await HelperFunction.saveUserEmailSf(email);
-  //         Get.to(MainPage());
-  //       } else {
-  //         showSnackbar(context, kredcolor, value);
-  //         setState(() {
-  //           isLoading = false;
-  //         });
-  //       }
-  //     });
-  //   }
-  // }
   selectImage() async {
     Uint8List im = await pickImage(ImageSource.gallery);
     // set state because we need to display the image we selected on the circle avatar

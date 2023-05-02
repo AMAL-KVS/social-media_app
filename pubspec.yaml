@@ -27,6 +27,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  anim_search_bar: ^2.0.3
   cloud_firestore: ^4.4.4
   cupertino_icons: ^1.0.5
   firebase_auth: ^4.2.10
@@ -35,11 +36,14 @@ dependencies:
   floating_bottom_bar: ^0.0.1
   flutter:
     sdk: flutter
+  flutter_screenutil: ^5.5.3+2
+  flutter_snake_navigationbar: ^0.6.1
+  cached_network_image: ^3.2.1
   get: ^4.6.5
   google_sign_in: ^6.0.2
   image: ^4.0.15
   image_picker: ^0.8.7
-  intl: 
+  intl: null
   intl_phone_field: ^3.1.0
   otp_text_field: ^1.1.3
   pandabar: ^0.1.2

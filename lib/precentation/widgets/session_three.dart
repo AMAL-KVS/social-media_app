@@ -10,24 +10,21 @@ class SessionThree extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 600,
-      child: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('posts').snapshots(),
-          builder: (context,
-              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return ListView.builder(
-                shrinkWrap: true,
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index) {
-                  return PostsCardWidgets(
-                      snap: snapshot.data!.docs[index].data());
-                });
-          }),
-    );
+        height: 600,
+        child: StreamBuilder(
+            stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+            builder: (context,
+                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    return PostsCardWidgets(
+                        snap: snapshot.data!.docs[index].data());
+                  });
+            }));
   }
 }

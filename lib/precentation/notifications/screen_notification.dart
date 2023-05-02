@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_media/core/constants/constands.dart';
-import 'package:social_media/precentation/messege/widgets/screen_chat.dart';
+import 'package:social_media/precentation/messege/chat_screen.dart';
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({Key? key}) : super(key: key);
@@ -15,8 +15,8 @@ class NotificationsScreen extends StatelessWidget {
                 child: ListTile(
                   subtitle: const Text('Active Now'),
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: ((context) => const ChatScreen())));
+                    // Navigator.of(context).push(MaterialPageRoute(
+                    //     builder: ((context) => const ChatScreen())));
                   },
                   leading: const CircleAvatar(
                     radius: 40,

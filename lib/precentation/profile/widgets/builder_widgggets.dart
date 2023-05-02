@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:social_media/precentation/profile/widgets/show_diloge_posts.dart';
 
 // ignore: must_be_immutable
 class PostsBuilderWidjet extends StatefulWidget {

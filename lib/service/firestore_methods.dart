@@ -125,4 +125,37 @@ class FireStoreMethods {
       print(e.toString());
     }
   }
+
+// getting the chats
+
+  // Post chat
+  Future<String> postchat(String chatId, String text, String uid, String name,
+      String profilePic) async {
+    String res = "Some error occurred";
+    try {
+      if (text.isNotEmpty) {
+        // if the likes list contains the user uid, we need to remove it
+        String chattId = const Uuid().v1();
+        _firestore
+            .collection('chat')
+            .doc(chatId)
+            .collection('messeges')
+            .doc(chattId)
+            .set({
+          'profilePic': profilePic,
+          'name': name,
+          'uid': uid,
+          'text': text,
+          'chattId': chattId,
+          'datePublished': DateTime.now(),
+        });
+        res = 'success';
+      } else {
+        res = "Please enter text";
+      }
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
 }
