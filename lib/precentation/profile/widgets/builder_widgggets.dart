@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:social_media/precentation/profile/instagram/instagram_widgets.dart';
 
 // ignore: must_be_immutable
 class PostsBuilderWidjet extends StatefulWidget {
@@ -16,6 +17,7 @@ class _PostsBuilderWidjetState extends State<PostsBuilderWidjet> {
 
   @override
   Widget build(BuildContext context) {
+    late OverlayEntry _popupDialog;
     //String postId = const Uuid().v4();
     return FutureBuilder(
         future: FirebaseFirestore.instance
@@ -43,10 +45,11 @@ class _PostsBuilderWidjetState extends State<PostsBuilderWidjet> {
               itemBuilder: (ctx, index) {
                 DocumentSnapshot snap = (snapshot.data! as dynamic).docs[index];
                 return GestureDetector(
-                    onLongPress: () async {
-                      // await showAlertDialog(
-                      //     context, snap['postUrl'], snap['postmessege']);
+                    onLongPress: () {
+                      _popupDialog = createPopupDialog(snap['postUrl']);
+                      Overlay.of(context)!.insert(_popupDialog);
                     },
+                    onLongPressEnd: (details) => _popupDialog.remove(),
                     child: Container(
                         width: 100,
                         height: 100,
@@ -57,4 +60,16 @@ class _PostsBuilderWidjetState extends State<PostsBuilderWidjet> {
               });
         });
   }
+}
+
+Widget _createPopupContent(String url) => Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16.0),
+        child: SizedBox(child: Image.network(url, fit: BoxFit.fitWidth)),
+      ),
+    );
+OverlayEntry createPopupDialog(String url) {
+  return OverlayEntry(
+      builder: (context) => AnimatedDialog(child: _createPopupContent(url)));
 }

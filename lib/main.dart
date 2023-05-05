@@ -8,6 +8,7 @@ import 'package:social_media/controller/theem_controller.dart';
 import 'package:social_media/precentation/Login/screen_login.dart';
 import 'package:flutter/foundation.dart';
 import 'package:social_media/precentation/main_page/main_page_screen.dart';
+import 'package:social_media/precentation/splash/screen_splash.dart';
 import 'package:social_media/shared/constants.dart';
 
 void main(List<String> args) async {
@@ -57,21 +58,6 @@ class _MyAppState extends State<MyApp> {
             darkTheme: MyTheme.darkTheme,
             theme: MyTheme.lightTheme,
             themeMode: ThemeMode.system,
-            home: StreamBuilder(
-                stream: FirebaseAuth.instance.authStateChanges(),
-                builder: ((context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.active) {
-                    if (snapshot.hasData) {
-                      return MainPage();
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('${snapshot.error}'));
-                    }
-                  }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  return const LoginScreen();
-                }))));
+            home: const SplashScreen()));
   }
 }

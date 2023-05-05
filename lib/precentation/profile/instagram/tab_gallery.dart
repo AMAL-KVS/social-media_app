@@ -1,6 +1,5 @@
 // import 'package:flutter/material.dart';
-// import 'package:social_media/precentation/profile/screen_profile.dart';
-// import 'package:social_media/precentation/profile/widgets/instagram_widgets.dart';
+// import 'package:social_media/precentation/profile/instagram/instagram_widgets.dart';
 
 // class Gallery extends StatefulWidget {
 //   @override
@@ -33,7 +32,7 @@
 //   Widget _createGridTileWidget(String url) => Builder(
 //         builder: (context) => GestureDetector(
 //           onLongPress: () {
-//             _popupDialog = _createPopupDialog(url);
+//             _popupDialog = createPopupDialog(url);
 //             Overlay.of(context)!.insert(_popupDialog);
 //           },
 //           onLongPressEnd: (details) => _popupDialog.remove(),
@@ -41,7 +40,7 @@
 //         ),
 //       );
 
-//   OverlayEntry _createPopupDialog(String url) {
+//   OverlayEntry createPopupDialog(String url) {
 //     return OverlayEntry(
 //       builder: (context) => AnimatedDialog(
 //         child: _createPopupContent(url),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:social_media/core/constants/constands.dart';
 import 'package:social_media/precentation/search/screen_search.dart';
 import 'package:social_media/widgets/icon_button_widgets.dart';
 
@@ -17,9 +18,10 @@ class _SessionOneState extends State<SessionOne> {
   Widget build(BuildContext context) {
     //  AuthMethods authService = AuthMethods();
     return AnimatedContainer(
-      duration: const Duration(microseconds: 2000),
+      duration: const Duration(microseconds: 1000),
       width: double.infinity,
-      height: 100,
+      height: 90,
+      color: kwhitecolor,
       // color: kblackcolor,
       child: Row(
         children: [

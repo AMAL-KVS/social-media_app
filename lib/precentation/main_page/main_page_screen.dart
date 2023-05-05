@@ -10,7 +10,7 @@ import 'package:social_media/precentation/profile/screen_profile.dart';
 class MainPage extends StatelessWidget {
   MainPage({Key? key}) : super(key: key);
   final _pages = [
-    const HomeScreen(),
+    HomeScreen(),
     MessagesScreen(),
     const NewPostsScreen(),
     ProfileBaseScreen(uid: FirebaseAuth.instance.currentUser!.uid),

@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:social_media/core/constants/constands.dart';
@@ -8,8 +6,6 @@ import 'package:social_media/precentation/Login/signUp/sighn_up_page.dart';
 import 'package:social_media/precentation/main_page/main_page_screen.dart';
 import 'package:social_media/precentation/sighnup/screen_sighnup.dart';
 import 'package:social_media/service/auth_service.dart';
-
-import 'package:social_media/widgets/sncack_bar.dart';
 
 class LogInPageScreenWidget extends StatefulWidget {
   const LogInPageScreenWidget({Key? key}) : super(key: key);
@@ -36,6 +32,9 @@ class _LogInPageScreenWidgetState extends State<LogInPageScreenWidget> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      SizedBox(
+                        child: Image.asset(mainLogo),
+                      ),
                       Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: TextFormField(
@@ -131,34 +130,6 @@ class _LogInPageScreenWidgetState extends State<LogInPageScreenWidget> {
                           ])
                     ])));
   }
-
-//   logIn() async {
-//     if (formKey.currentState!.validate()) {
-//       setState(() {
-//         isLoading = true;
-//       });
-//       await authservice
-//           .logInWithUserNameAndPassword(email, password)
-//           .then((value) async {
-//         if (value == true) {
-//           QuerySnapshot snapshot =
-//               await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
-//                   .gettingTheUserData(email);
-// //saving the  values shared preferencess
-//           // await HelperFunction.saveUserLogedInStus(true);
-//           // await HelperFunction.saveUserEmailSf(email);
-//           // await HelperFunction.saveUserNameSf(snapshot.docs[0]['userName']);
-
-//           Get.to(MainPage());
-//         } else {
-//           showSnackbar(context, kredcolor, value);
-//           setState(() {
-//             isLoading = false;
-//           });
-//         }
-//       });
-//     }
-//   }
 
   void loginUser() async {
     setState(() {

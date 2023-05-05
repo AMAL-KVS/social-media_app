@@ -4,14 +4,14 @@ import 'package:social_media/precentation/profile/widgets/show_diloge_posts.dart
 
 class ProfileBaseScreen extends StatefulWidget {
   final uid;
+
   const ProfileBaseScreen({Key? key, required this.uid}) : super(key: key);
 
   @override
   State<ProfileBaseScreen> createState() => _ScreenProfileState();
 }
 
-class _ScreenProfileState extends State<ProfileBaseScreen>
-    with TickerProviderStateMixin {
+class _ScreenProfileState extends State<ProfileBaseScreen> {
   @override
   Widget build(BuildContext context) {
     //TabController tabController = TabController(length: 3, vsync: this);

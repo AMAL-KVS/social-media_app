@@ -155,7 +155,7 @@ class _PostsCardWidgetsState extends State<PostsCardWidgets> {
                   },
                   child: Stack(alignment: Alignment.center, children: [
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.35,
+                      //height: MediaQuery.of(context).size.height * 0.35,
                       width: double.infinity,
                       child: Image.network(
                         widget.snap['postUrl'].toString(),

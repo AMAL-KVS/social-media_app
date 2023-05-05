@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:social_media/Application/provider.dart';
 import 'package:social_media/core/constants/constands.dart';
 import 'package:social_media/precentation/login/screen_login.dart';
 import 'package:social_media/precentation/messege/chat_screen.dart';
@@ -16,29 +20,11 @@ import 'package:social_media/widgets/sncack_bar.dart';
 import 'package:social_media/Application/user_model.dart' as model;
 import '../followers/screen_followers.dart';
 
-Future<void> showAlertDialog(
-    BuildContext context, String imageUrl, String caption) async {
-  return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-            // <-- SEE HERE
-
-            content: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: SizedBox(
-                    child: Image(
-                        fit: BoxFit.cover, image: NetworkImage(imageUrl)))));
-      });
-}
-
 class ProfileStackWIdgets extends StatefulWidget {
   final uid;
   final snap;
-  const ProfileStackWIdgets({Key? key, required this.uid, required this.snap})
+  bool isLoading = true;
+  ProfileStackWIdgets({Key? key, required this.uid, required this.snap})
       : super(key: key);
 
   @override
@@ -96,7 +82,7 @@ class _ProfileStackWIdgetsState extends State<ProfileStackWIdgets> {
   @override
   Widget build(BuildContext context) {
     AuthMethods authMethods = AuthMethods();
-    return isLoading
+    return isLoading == true
         ? const Center(child: CircularProgressIndicator())
         : Stack(children: [
             const SizedBox(
@@ -179,7 +165,7 @@ class _ProfileStackWIdgetsState extends State<ProfileStackWIdgets> {
                                 ? FollowButton(
                                     backgroundColor: kblackcolor,
                                     borderColor: kwhitecolor,
-                                    text: 'Lotgg Out',
+                                    text: 'LogOut',
                                     textColor: kwhitecolor,
                                     function: () {
                                       authMethods.signOut();

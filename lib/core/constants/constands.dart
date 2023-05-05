@@ -12,6 +12,8 @@ const knullimage = 'https://i.stack.imgur.com/Sgdk2.gif';
 const knullimagebaground =
     'lib/precentation/assets/WhatsApp Image 2023-03-20 at 18.37.23.jpg';
 const knullimageProfile = 'lib/precentation/assets/986048.jpg';
+const splashImage = 'lib/precentation/assets/logo-removebg-preview.png';
+const mainLogo = 'lib/precentation/assets/amjoz-low-resolution-color-logo.png';
 //sizes
 const kwidth30 = SizedBox(width: 30);
 const kwidth10 = SizedBox(width: 10);

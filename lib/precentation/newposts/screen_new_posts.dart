@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:social_media/Application/provider.dart';
 import 'package:social_media/core/constants/constands.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:social_media/helper/image_picker.dart';
+import 'package:social_media/service/auth_service.dart';
 import 'package:social_media/service/firestore_methods.dart';
 
 class NewPostsScreen extends StatefulWidget {
@@ -86,23 +88,22 @@ class _NewPostsScreenState extends State<NewPostsScreen> {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: kwhitecolor,
-          elevation: 0,
-          toolbarHeight: 80,
-          centerTitle: true,
-          title:
-              const Text('Create a Post', style: TextStyle(color: kblackcolor)),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  addPost(
-                      userProvider.getUser.uid,
-                      userProvider.getUser.username,
-                      userProvider.getUser.photoUrl);
-                },
-                icon: const Icon(Icons.post_add, color: kblackcolor))
-          ],
-        ),
+            backgroundColor: kwhitecolor,
+            elevation: 0,
+            toolbarHeight: 80,
+            centerTitle: true,
+            title: const Text('Create a Post',
+                style: TextStyle(color: kblackcolor)),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    addPost(
+                        userProvider.getUser.uid,
+                        userProvider.getUser.username,
+                        userProvider.getUser.photoUrl);
+                  },
+                  icon: const Icon(Icons.post_add, color: kblackcolor))
+            ]),
         body: isLoading
             ? const Center(
                 child: CircularProgressIndicator(),
@@ -110,30 +111,30 @@ class _NewPostsScreenState extends State<NewPostsScreen> {
             : ListView(
                 children: [
                   Row(
-                    children: const [
+                    children: [
                       CircleAvatar(
-                        radius: 30,
+                        radius: 20,
                         backgroundColor: kblackcolor,
-                        backgroundImage: NetworkImage(knullimage),
+                        backgroundImage: NetworkImage(
+                            userProvider.getUser.photoUrl.toString()),
                       ),
                       kwidth10,
                       Text(
-                        'User Name',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        userProvider.getUser.username,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       )
                     ],
                   ),
+                  kheight20,
                   _file == null
                       ? const Center(
                           child: Text('Post some'),
                         )
                       : imageContainer(_file, context),
-                  Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 150),
-                      child: TextField(
-                          controller: _descriptionController,
-                          decoration:
-                              const InputDecoration(hintText: 'New post....'))),
+                  TextField(
+                      controller: _descriptionController,
+                      decoration:
+                          const InputDecoration(hintText: 'New post....')),
                   ListTile(
                       leading: const Icon(Icons.photo),
                       title: const Text('Add A Phooto'),
@@ -158,8 +159,8 @@ class _NewPostsScreenState extends State<NewPostsScreen> {
 
   Container imageContainer(imageLink, context) {
     return Container(
-        // height: 400,
-        // width: 100,
+        height: 500,
+        width: 100,
         decoration: BoxDecoration(
             image: DecorationImage(
                 fit: BoxFit.fill, image: MemoryImage(imageLink!))));
