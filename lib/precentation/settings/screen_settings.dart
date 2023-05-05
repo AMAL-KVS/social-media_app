@@ -72,10 +72,8 @@ class SettingsScreen extends StatelessWidget {
                 log('log out');
               }),
           const Spacer(),
-          const Text(
-            'A m J o Z  \n   1.0.0',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+          const Text('A m J o Z  \n   1.0.0',
+              style: TextStyle(fontWeight: FontWeight.bold)),
           kheight20
         ]));
   }
