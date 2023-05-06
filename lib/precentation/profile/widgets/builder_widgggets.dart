@@ -47,7 +47,7 @@ class _PostsBuilderWidjetState extends State<PostsBuilderWidjet> {
                 return GestureDetector(
                     onLongPress: () {
                       _popupDialog = createPopupDialog(snap['postUrl']);
-                      Overlay.of(context)!.insert(_popupDialog);
+                      Overlay.of(context).insert(_popupDialog);
                     },
                     onLongPressEnd: (details) => _popupDialog.remove(),
                     child: Container(
