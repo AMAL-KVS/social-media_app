@@ -1,4 +1,4 @@
-package com.example.social_media
+package com.brototype.amjoz
 
 import io.flutter.embedding.android.FlutterActivity
 
