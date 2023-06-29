@@ -7,6 +7,7 @@ import 'package:social_media/controller/theem_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:social_media/precentation/splash/screen_splash.dart';
 import 'package:social_media/shared/constants.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,12 +21,20 @@ void main(List<String> args) async {
   } else {
     await Firebase.initializeApp();
   }
-
-  runApp(const MyApp());
+  final navigatorKey = GlobalKey<NavigatorState>();
+  ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
+  runApp(MyApp(
+    navigatorKey: navigatorKey,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final GlobalKey<NavigatorState> navigatorKey;
+
+  const MyApp({
+    Key? key,
+    required this.navigatorKey,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +43,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => UserProvider()),
         ],
         child: GetMaterialApp(
+            navigatorKey: navigatorKey,
             title: 'social media',
             debugShowCheckedModeBanner: false,
             darkTheme: MyTheme.darkTheme,

@@ -19,3 +19,7 @@ const kwidth30 = SizedBox(width: 30);
 const kwidth10 = SizedBox(width: 10);
 const kheight10 = SizedBox(height: 10);
 const kheight20 = SizedBox(height: 20);
+
+const yourAppID = 708361275;
+const yourAppSign =
+    'aae2125bacabe35c86f88103f52473025dc69dc85ca8a860f265e3be9607a1e4';

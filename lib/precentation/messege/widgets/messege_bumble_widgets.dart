@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_media/Application/chat_model.dart';
+import 'package:social_media/core/constants/constands.dart';
 
 class MessageWidget extends StatelessWidget {
   final Message message;
@@ -29,9 +30,7 @@ class MessageWidget extends StatelessWidget {
           margin: EdgeInsets.all(16),
           constraints: BoxConstraints(maxWidth: 140),
           decoration: BoxDecoration(
-            color: isMe
-                ? Color.fromARGB(255, 38, 239, 128)
-                : Theme.of(context).accentColor,
+            color: isMe ? Color.fromARGB(255, 38, 239, 128) : kbluecolor,
             borderRadius: isMe
                 ? borderRadius.subtract(BorderRadius.only(bottomRight: radius))
                 : borderRadius.subtract(BorderRadius.only(bottomLeft: radius)),

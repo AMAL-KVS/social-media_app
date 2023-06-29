@@ -10,7 +10,7 @@ import 'package:social_media/Application/user_model.dart' as model;
 import 'package:social_media/widgets/image_alert_view.dart';
 
 class MessagesScreen extends StatelessWidget {
-  MessagesScreen({Key? key}) : super(key: key);
+  const MessagesScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
